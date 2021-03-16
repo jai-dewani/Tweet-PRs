@@ -1,11 +1,10 @@
 # Project Name
 
-Project Description
+A GitHub Action that will tweet out about certain actions in your repo so everyone following you can be kept updated
 
 ## Live Version
 
-This page is not yet deployed.
-<!--This page is currently deployed. [View the live website.]()-->
+You can checkout the GitHub Action [Tweet Activity](https://github.com/marketplace/actions/tweet-activity), I'll soon be publishing sample workflows using this action
 
 ## Feedback and Bugs
 
@@ -21,7 +20,7 @@ Before interacting with our community, please read our [Code of Conduct](CODE_OF
 
 ## Licensing
 
-Copyright (C) 2020 Nicholas Carrigan
+Copyright (C) 2021 Jai Kumar Dewani
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
