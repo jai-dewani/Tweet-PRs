@@ -1,5 +1,5 @@
 name: 'Tweet PRs'
-description: "A GitHub Action that will tweet out about the PR when it get's merged as a pat on the back!"
+description: 'A GitHub Action that will tweet out about certain actions in your repo so everyone following you can be kept updated'
 inputs:
   tweet:  # id of input
     description: 'Content of the tweet you wanna make'
