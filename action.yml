@@ -1,0 +1,13 @@
+name: 'Hello World' 
+description: 'Greet someone and record the time'
+inputs:
+  tweet:  # id of input
+    description: 'Content of the tweet you wanna make'
+    required: true
+    default: 'World World'
+output: 
+  tweet-sent:
+    description: 'The tweet that got sent out'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

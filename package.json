@@ -1,0 +1,24 @@
+{
+  "name": "Tweet-PRs",
+  "version": "1.0.0",
+  "description": "A GitHub Action that will tweet out about the PR when it get's merged as a pat on the back for the contributor!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jai-dewani/Tweet-PRs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jai-dewani/Tweet-PRs/issues"
+  },
+  "homepage": "https://github.com/jai-dewani/Tweet-PRs#readme",
+  "dependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/github": "^4.0.0"
+  }
+}
