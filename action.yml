@@ -5,7 +5,7 @@ inputs:
     description: 'Content of the tweet you wanna make'
     required: true
     default: 'World World'
-output: 
+outputs: 
   tweet-sent:
     description: 'The tweet that got sent out'
 runs:
