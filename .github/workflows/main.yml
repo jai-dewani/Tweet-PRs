@@ -1,4 +1,10 @@
-on: [push]
+name: Sample worflow
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
 
 jobs:
   hello_world_job:
