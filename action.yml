@@ -1,4 +1,4 @@
-name: 'Tweet PRs'
+name: 'Tweet Activity'
 description: 'A GitHub Action that will tweet out about certain actions in your repo so everyone following you can be kept updated'
 inputs:
   tweet:  # id of input
