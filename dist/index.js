@@ -5840,8 +5840,8 @@ async function run() {
         console.log(`Tweet: ${tweetContent}`);
         const time = (new Date()).toString();
         core.setOutput("time",time);
-        const playload = JSON.stringify(github.context.payload, undefined, 2);
-        console.log(`The event payload: ${payload}`);
+        const payload = JSON.stringify(github.context.payload, undefined, 2);
+        console.log(`The event payload: ${github.context.payload}`);
     }catch(error){
         core.setFailed(error.message);
     }
