@@ -11,6 +11,3 @@ output:
 runs:
   using: 'node12'
   main: 'dist/index.js'
-branding:
-  icon: at-sign
-  color: blue
