@@ -1,4 +1,4 @@
-name: 'TWeet-PRs'
+name: 'Tweet PRs'
 description: 'A GitHub Action that will tweet out about the PR when it get's merged as a pat on the back!'
 inputs:
   tweet:  # id of input
