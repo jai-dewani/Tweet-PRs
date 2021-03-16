@@ -1,13 +1,18 @@
-on: [push]
+name: Sample worflow
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
 
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-    - name: Hello world action step
-      id: hello
-      uses: jai-dewani/tweet-PRs
+    - name: Tweet Activity
+      uses: jai-dewani/Tweet-PRs@v0.2-alpha
       with:
         tweet: 'This is a test run'
     # Use the output from the `hello` step
