@@ -1,13 +1,13 @@
-name: 'Hello World'
+name: 'Hello World' 
 description: 'Greet someone and record the time'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  tweet:  # id of input
+    description: 'Content of the tweet you wanna make'
     required: true
-    default: 'World'
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+    default: 'World World'
+output: 
+  tweet-sent:
+    description: 'The tweet that got sent out'
 runs:
   using: 'node12'
-  main: 'index.js'
+  main: 'dist/index.js'
