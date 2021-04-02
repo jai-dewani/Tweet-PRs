@@ -1,6 +1,9 @@
 # Project Name
 
-A GitHub Action that will tweet out about certain actions in your repo so everyone following you can be kept updated
+A GitHub Action that will tweet about events/commits/issues/pull requests from your repository so everyone following you can be kept updated on what's happening
+Some certain senarious I see this being used is 
+- Tweeting about a PR when it gets merged mentioning who merged it so they get a pat on the back for contributing 
+- Tweeting about a new issue so your followers can take up one if they find it interesting 
 
 ## Live Version
 
