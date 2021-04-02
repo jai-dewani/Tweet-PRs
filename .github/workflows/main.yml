@@ -11,7 +11,7 @@ jobs:
     name: A job to say hello
     steps:
     - name: Tweet Activity
-      uses: jai-dewani/Tweet-PRs@v0.3.0-alpha
+      uses: jai-dewani/Tweet-PRs@v0.1.0-alpha
       with:
         tweet: 'This is a test run'
     # Use the output from the `hello` step
