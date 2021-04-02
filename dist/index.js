@@ -39101,7 +39101,7 @@ async function run() {
     try {
         const payload = JSON.stringify(github.context.payload, undefined, 2);
         var tweetContent = core.getInput('tweet');
-        tweetContent = renderString(tweetContent,payload);
+        const tweet = await renderString(tweetContent,payload);
         console.log(`Tweet: ${tweetContent}`);
 
         twitterCredentials =  {
@@ -39112,7 +39112,7 @@ async function run() {
         }
         
         if(skipAction(payload)){
-            await Tweet(twitterCredentials, tweetContent);
+            await Tweet(twitterCredentials, tweet);
             core.setOutput("Action completed");
         }
         else
