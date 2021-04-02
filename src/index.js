@@ -1,17 +1,45 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
+
+const { getTwitterID, extractTwitterHandle } =  require("./fetchData");
+const { renderString } = require("./renderText");
+const { Tweet } = require("./tweet");
+
+const skipAction = (payload) => {
+    for(var i=0; i<payload['commits'].length; i++){
+        var message = payload['commits'][i]['message'];
+        if(message.includes("/[Skip tweet]/i"))
+            return true;
+        return false;
+    }
+}
+
 async function run() {
     try {
-        const tweetContent = core.getInput('tweet');
-        console.log(`Tweet: ${tweetContent}`);
-        const time = (new Date()).toString();
-        core.setOutput("time",time);
         const payload = JSON.stringify(github.context.payload, undefined, 2);
-        console.log(`The event payload: ${payload}`);
+        var tweetContent = core.getInput('tweet');
+        tweetContent = renderString(tweetContent,payload);
+        console.log(`Tweet: ${tweetContent}`);
+
+        twitterCredentials =  {
+            consumer_key: process.env.TWITTER_API_KEY,
+            consumer_secret: process.env.TWITTER_API_SECRET_KEY,
+            access_token_key: process.env.TWITTER_ACCESS_TOKEN,
+            access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+        }
+        
+        if(skipAction(payload)){
+            await Tweet(twitterCredentials, tweetContent);
+            core.setOutput("Action completed");
+        }
+        else
+            core.setOutput("Action skiped due to commit message");
+
     }catch(error){
         core.setFailed(error.message);
     }
 }
+
 
 run();
