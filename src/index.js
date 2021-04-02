@@ -19,10 +19,11 @@ async function run() {
     try {
         const payload = JSON.stringify(github.context.payload, undefined, 2);
         var tweetContent = core.getInput('tweet');
+        var tweet;
         try{
-            const tweet = await renderString(tweetContent,payload);
+            tweet = await renderString(tweetContent,payload);
         }catch(error){
-            const tweet = tweetContent;
+            tweet = tweetContent;
             console.log(error);
         }
         console.log(`Tweet: ${tweet}`);
