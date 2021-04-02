@@ -39134,7 +39134,7 @@ run();
 const { extractTwitterHandle } = __nccwpck_require__(7079);
 
 const renderString = async(str,obj) => {
-return await asyncStringReplace(str,/\$\{(.+?)\}/g,async(match,p1) => {
+    return await asyncStringReplace(str,/\$\{(.+?)\}/g,async(match,p1) => {
         return await index(obj,p1).then(x => x)
     })
 }
@@ -39159,7 +39159,7 @@ const index = async(obj,p1) => {
     if (typeof p1 == 'string')
         p1=p1.split('.');
         
-    while(p1.length>0){
+    while(p1 && p1.length>0){
         obj = obj[p1[0]]
         p1 = p1.slice(1);
     }
