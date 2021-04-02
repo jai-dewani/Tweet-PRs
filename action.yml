@@ -10,7 +10,7 @@ outputs:
     description: 'The tweet that got sent out'
 runs:
   using: 'node12'
-  main: 'dist/index.js'
+  main: 'src/index.js'
 branding:
   icon: at-sign
   color: blue
