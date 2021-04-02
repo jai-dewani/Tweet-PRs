@@ -4,7 +4,7 @@ inputs:
   tweet:  # id of input
     description: 'Content of the tweet you wanna make'
     required: true
-    default: 'World World'
+    default: 'Hello World'
 outputs: 
   tweet-sent:
     description: 'The tweet that got sent out'
