@@ -39101,8 +39101,13 @@ async function run() {
     try {
         const payload = JSON.stringify(github.context.payload, undefined, 2);
         var tweetContent = core.getInput('tweet');
-        const tweet = await renderString(tweetContent,payload);
-        console.log(`Tweet: ${tweetContent}`);
+        try{
+            const tweet = await renderString(tweetContent,payload);
+        }catch(error){
+            const tweet = tweetContent;
+            console.log(error);
+        }
+        console.log(`Tweet: ${tweet}`);
 
         twitterCredentials =  {
             consumer_key: process.env.TWITTER_API_KEY,
