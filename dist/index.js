@@ -39220,7 +39220,6 @@ async function run() {
     try {
         const payload_out = JSON.stringify(github.context.payload, undefined, 2);
         const payload = github.context.payload;
-        console.log(payload_out)
         var tweetContent = core.getInput('tweet');
         var tweet;
         try{
@@ -39229,7 +39228,7 @@ async function run() {
             tweet = tweetContent;
             console.log(error);
         }
-        console.log(`Tweet: ${tweet}`);
+        // console.log(`Tweet: ${tweet}`);
 
         twitterCredentials =  {
             consumer_key: process.env.TWITTER_API_KEY,
@@ -39239,7 +39238,9 @@ async function run() {
         }
         
         if(skipAction(payload)){
-            await Tweet(twitterCredentials, tweet);
+            console.log(`Tweet: ${tweet}`);
+            var result = await Tweet(twitterCredentials, tweet);
+            console.log(result);
             core.setOutput("Action completed");
         }
         else
@@ -39269,8 +39270,6 @@ const asyncStringReplace = async (str, regex, obj, aReplacer) => {
     let match;
     let i = 0;
     while ((match = regex.exec(str)) !== null) {
-        console.log("Inside Match",match);
-        console.log("Inside Match",obj);
         substrs.push(str.slice(i, match.index));
         substrs.push(await aReplacer(obj, match[1]));
         i = regex.lastIndex;
@@ -39281,20 +39280,16 @@ const asyncStringReplace = async (str, regex, obj, aReplacer) => {
 
 const index = async(obj,p1) => {
     if(typeof p1 == 'string' && p1 =='twitter_username'){
-        console.log("Inside Index, Twitter username",obj,p1)        
         return await extractTwitterHandle(obj);
     }
     else{
         if (typeof p1 == 'string')
             p1=p1.split('.');
             
-        console.log("Inside Index",obj,p1)        
         while(p1 && p1.length>0){
             obj = obj[p1[0]]
             p1 = p1.slice(1);
-            console.log("Inside Index",obj,p1)        
         }
-        console.log(obj);
         return obj;
     } 
 }
@@ -39311,6 +39306,7 @@ function createTweet(client, options) {
   return new Promise((resolve, reject) => {
     client.post("statuses/update", options, (error, result) => {
       if (error) {
+        console.log(error);
         return reject(error);
       }
       resolve({
