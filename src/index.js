@@ -16,7 +16,9 @@ const skipAction = (payload) => {
 
 async function run() {
     try {
-        const payload = JSON.stringify(github.context.payload, undefined, 2);
+        const payload_out = JSON.stringify(github.context.payload, undefined, 2);
+        const payload = github.context.payload;
+        console.log(payload_out)
         var tweetContent = core.getInput('tweet');
         var tweet;
         try{
