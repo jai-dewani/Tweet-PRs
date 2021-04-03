@@ -21,6 +21,7 @@
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "@octokit/core": "^3.3.2",
+    "dotenv": "^8.2.0",
     "twitter": "^1.7.1"
   },
   "devDependencies": {
