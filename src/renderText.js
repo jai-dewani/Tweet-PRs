@@ -1,9 +1,7 @@
 const { extractTwitterHandle } = require("../src/fetchData");
 
 const renderString = async(str,obj) => {
-    return await asyncStringReplace(str,/\$\{(.+?)\}/g, obj, async(match,p1) => {
-        return await index(obj,p1).then(x => x)
-    })
+    return await asyncStringReplace(str,/\$\{(.+?)\}/g, obj, index);
 }
 
 const asyncStringReplace = async (str, regex, obj, aReplacer) => {
@@ -12,7 +10,7 @@ const asyncStringReplace = async (str, regex, obj, aReplacer) => {
     let i = 0;
     while ((match = regex.exec(str)) !== null) {
         substrs.push(str.slice(i, match.index));
-        substrs.push(aReplacer(...match, obj));
+        substrs.push(await aReplacer(obj, match[1]));
         i = regex.lastIndex;
     }
     substrs.push(str.slice(i));
