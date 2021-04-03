@@ -39207,12 +39207,12 @@ __nccwpck_require__(8620).config()
 const { renderString } = __nccwpck_require__(2633);
 const { Tweet } = __nccwpck_require__(5083);
 
-const skipAction = (payload) => {
+const runAction = (payload) => {
     for(var i=0; i<payload['commits'].length; i++){
         var message = payload['commits'][i]['message'];
         if(message.includes("/[Skip tweet]/i"))
-            return true;
-        return false;
+            return false;
+        return true;
     }
 }
 
@@ -39237,7 +39237,7 @@ async function run() {
             access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
         }
         
-        if(skipAction(payload)){
+        if(runAction(payload)){
             console.log(`Tweet: ${tweet}`);
             var result = await Tweet(twitterCredentials, tweet);
             console.log(result);
