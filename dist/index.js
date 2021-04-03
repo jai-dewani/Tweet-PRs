@@ -12833,6 +12833,126 @@ exports.Deprecation = Deprecation;
 
 /***/ }),
 
+/***/ 8620:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+/* @flow */
+/*::
+
+type DotenvParseOptions = {
+  debug?: boolean
+}
+
+// keys and values from src
+type DotenvParseOutput = { [string]: string }
+
+type DotenvConfigOptions = {
+  path?: string, // path to .env file
+  encoding?: string, // encoding of .env file
+  debug?: string // turn on logging for debugging purposes
+}
+
+type DotenvConfigOutput = {
+  parsed?: DotenvParseOutput,
+  error?: Error
+}
+
+*/
+
+const fs = __nccwpck_require__(5747)
+const path = __nccwpck_require__(5622)
+
+function log (message /*: string */) {
+  console.log(`[dotenv][DEBUG] ${message}`)
+}
+
+const NEWLINE = '\n'
+const RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/
+const RE_NEWLINES = /\\n/g
+const NEWLINES_MATCH = /\n|\r|\r\n/
+
+// Parses src into an Object
+function parse (src /*: string | Buffer */, options /*: ?DotenvParseOptions */) /*: DotenvParseOutput */ {
+  const debug = Boolean(options && options.debug)
+  const obj = {}
+
+  // convert Buffers before splitting into lines and processing
+  src.toString().split(NEWLINES_MATCH).forEach(function (line, idx) {
+    // matching "KEY' and 'VAL' in 'KEY=VAL'
+    const keyValueArr = line.match(RE_INI_KEY_VAL)
+    // matched?
+    if (keyValueArr != null) {
+      const key = keyValueArr[1]
+      // default undefined or missing values to empty string
+      let val = (keyValueArr[2] || '')
+      const end = val.length - 1
+      const isDoubleQuoted = val[0] === '"' && val[end] === '"'
+      const isSingleQuoted = val[0] === "'" && val[end] === "'"
+
+      // if single or double quoted, remove quotes
+      if (isSingleQuoted || isDoubleQuoted) {
+        val = val.substring(1, end)
+
+        // if double quoted, expand newlines
+        if (isDoubleQuoted) {
+          val = val.replace(RE_NEWLINES, NEWLINE)
+        }
+      } else {
+        // remove surrounding whitespace
+        val = val.trim()
+      }
+
+      obj[key] = val
+    } else if (debug) {
+      log(`did not match key and value when parsing line ${idx + 1}: ${line}`)
+    }
+  })
+
+  return obj
+}
+
+// Populates process.env from .env file
+function config (options /*: ?DotenvConfigOptions */) /*: DotenvConfigOutput */ {
+  let dotenvPath = path.resolve(process.cwd(), '.env')
+  let encoding /*: string */ = 'utf8'
+  let debug = false
+
+  if (options) {
+    if (options.path != null) {
+      dotenvPath = options.path
+    }
+    if (options.encoding != null) {
+      encoding = options.encoding
+    }
+    if (options.debug != null) {
+      debug = true
+    }
+  }
+
+  try {
+    // specifying an encoding returns a string instead of a buffer
+    const parsed = parse(fs.readFileSync(dotenvPath, { encoding }), { debug })
+
+    Object.keys(parsed).forEach(function (key) {
+      if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
+        process.env[key] = parsed[key]
+      } else if (debug) {
+        log(`"${key}" is already defined in \`process.env\` and will not be overwritten`)
+      }
+    })
+
+    return { parsed }
+  } catch (e) {
+    return { error: e }
+  }
+}
+
+module.exports.config = config
+module.exports.parse = parse
+
+
+/***/ }),
+
 /***/ 1643:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -39040,7 +39160,7 @@ function wrappy (fn, cb) {
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const { Octokit } = __nccwpck_require__(5886);;
-const octokit = new Octokit({auth: `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` });
+const octokit = new Octokit({auth: `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` });
 var result;
 
 const getTwitterID = async(username) => {
@@ -39082,9 +39202,8 @@ module.exports = { getTwitterID, extractTwitterHandle };
 
 const core = __nccwpck_require__(6422);
 const github = __nccwpck_require__(8484);
+__nccwpck_require__(8620).config()
 
-
-const { getTwitterID, extractTwitterHandle } =  __nccwpck_require__(7079);
 const { renderString } = __nccwpck_require__(2633);
 const { Tweet } = __nccwpck_require__(5083);
 
@@ -39140,18 +39259,18 @@ run();
 const { extractTwitterHandle } = __nccwpck_require__(7079);
 
 const renderString = async(str,obj) => {
-    return await asyncStringReplace(str,/\$\{(.+?)\}/g,async(match,p1) => {
+    return await asyncStringReplace(str,/\$\{(.+?)\}/g, obj, async(match,p1) => {
         return await index(obj,p1).then(x => x)
     })
 }
 
-const asyncStringReplace = async (str, regex, aReplacer) => {
+const asyncStringReplace = async (str, regex, obj, aReplacer) => {
     const substrs = [];
     let match;
     let i = 0;
     while ((match = regex.exec(str)) !== null) {
         substrs.push(str.slice(i, match.index));
-        substrs.push(aReplacer(...match));
+        substrs.push(aReplacer(...match, obj));
         i = regex.lastIndex;
     }
     substrs.push(str.slice(i));
@@ -39161,15 +39280,16 @@ const asyncStringReplace = async (str, regex, aReplacer) => {
 const index = async(obj,p1) => {
     if(typeof p1 == 'string' && p1 =='twitter_username')
         return await extractTwitterHandle(obj);
-    
-    if (typeof p1 == 'string')
-        p1=p1.split('.');
-        
-    while(p1 && p1.length>0){
-        obj = obj[p1[0]]
-        p1 = p1.slice(1);
-    }
-    return obj;
+    else{
+        if (typeof p1 == 'string')
+            p1=p1.split('.');
+            
+        while(p1 && p1.length>0){
+            obj = obj[p1[0]]
+            p1 = p1.slice(1);
+        }
+        return obj;
+    } 
 }
 module.exports = { renderString };
 
