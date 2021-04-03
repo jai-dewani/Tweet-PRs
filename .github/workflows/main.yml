@@ -11,6 +11,6 @@ jobs:
     name: A job to say hello
     steps:
     - name: Tweet Activity
-      uses: jai-dewani/Tweet-PRs@v0.2.3
+      uses: jai-dewani/Tweet-PRs@v0.2.4
       with:
         tweet: 'This is a test run, change ${twitter_username}'
