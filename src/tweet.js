@@ -4,6 +4,7 @@ function createTweet(client, options) {
   return new Promise((resolve, reject) => {
     client.post("statuses/update", options, (error, result) => {
       if (error) {
+        console.log(error);
         return reject(error);
       }
       resolve({

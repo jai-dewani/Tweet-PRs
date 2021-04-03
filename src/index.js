@@ -18,7 +18,6 @@ async function run() {
     try {
         const payload_out = JSON.stringify(github.context.payload, undefined, 2);
         const payload = github.context.payload;
-        console.log(payload_out)
         var tweetContent = core.getInput('tweet');
         var tweet;
         try{
@@ -27,7 +26,7 @@ async function run() {
             tweet = tweetContent;
             console.log(error);
         }
-        console.log(`Tweet: ${tweet}`);
+        // console.log(`Tweet: ${tweet}`);
 
         twitterCredentials =  {
             consumer_key: process.env.TWITTER_API_KEY,
@@ -37,7 +36,9 @@ async function run() {
         }
         
         if(skipAction(payload)){
-            await Tweet(twitterCredentials, tweet);
+            console.log(`Tweet: ${tweet}`);
+            var result = await Tweet(twitterCredentials, tweet);
+            console.log(result);
             core.setOutput("Action completed");
         }
         else
