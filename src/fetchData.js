@@ -1,5 +1,5 @@
 const { Octokit } = require("@octokit/core");;
-const octokit = new Octokit({auth: `` });
+const octokit = new Octokit({auth: `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` });
 var result;
 
 const getTwitterID = async(username) => {

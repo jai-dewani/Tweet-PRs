@@ -1,8 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+require('dotenv').config()
 
-
-const { getTwitterID, extractTwitterHandle } =  require("./fetchData");
 const { renderString } = require("./renderText");
 const { Tweet } = require("./tweet");
 
