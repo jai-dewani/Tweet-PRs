@@ -29,13 +29,13 @@ async function run() {
         // console.log(`Tweet: ${tweet}`);
 
         twitterCredentials =  {
-            consumer_key: process.env.TWITTER_API_KEY,
-            consumer_secret: process.env.TWITTER_API_SECRET_KEY,
-            access_token_key: process.env.TWITTER_ACCESS_TOKEN,
-            access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+            consumer_key: secrets.TWITTER_API_KEY,
+            consumer_secret: secrets.TWITTER_API_SECRET_KEY,
+            access_token_key: secrets.TWITTER_ACCESS_TOKEN,
+            access_token_secret: secrets.TWITTER_ACCESS_TOKEN_SECRET,
         }
-        console.log(twitterCredentials);
-        
+        // console.log(twitterCredentials);
+
         if(runAction(payload)){
             console.log(`Tweet: ${tweet}`);
             var result = await Tweet(twitterCredentials, tweet);

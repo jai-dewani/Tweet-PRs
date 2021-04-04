@@ -39160,7 +39160,7 @@ function wrappy (fn, cb) {
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const { Octokit } = __nccwpck_require__(5886);;
-const octokit = new Octokit({auth: process.env.ACCESS_TOKEN });
+const octokit = new Octokit({auth: secrets.ACCESS_TOKEN });
 var result;
 
 const getTwitterID = async(username) => {
@@ -39231,13 +39231,13 @@ async function run() {
         // console.log(`Tweet: ${tweet}`);
 
         twitterCredentials =  {
-            consumer_key: process.env.TWITTER_API_KEY,
-            consumer_secret: process.env.TWITTER_API_SECRET_KEY,
-            access_token_key: process.env.TWITTER_ACCESS_TOKEN,
-            access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+            consumer_key: secrets.TWITTER_API_KEY,
+            consumer_secret: secrets.TWITTER_API_SECRET_KEY,
+            access_token_key: secrets.TWITTER_ACCESS_TOKEN,
+            access_token_secret: secrets.TWITTER_ACCESS_TOKEN_SECRET,
         }
-        console.log(twitterCredentials);
-        
+        // console.log(twitterCredentials);
+
         if(runAction(payload)){
             console.log(`Tweet: ${tweet}`);
             var result = await Tweet(twitterCredentials, tweet);
