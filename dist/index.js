@@ -12833,126 +12833,6 @@ exports.Deprecation = Deprecation;
 
 /***/ }),
 
-/***/ 8620:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-/* @flow */
-/*::
-
-type DotenvParseOptions = {
-  debug?: boolean
-}
-
-// keys and values from src
-type DotenvParseOutput = { [string]: string }
-
-type DotenvConfigOptions = {
-  path?: string, // path to .env file
-  encoding?: string, // encoding of .env file
-  debug?: string // turn on logging for debugging purposes
-}
-
-type DotenvConfigOutput = {
-  parsed?: DotenvParseOutput,
-  error?: Error
-}
-
-*/
-
-const fs = __nccwpck_require__(5747)
-const path = __nccwpck_require__(5622)
-
-function log (message /*: string */) {
-  console.log(`[dotenv][DEBUG] ${message}`)
-}
-
-const NEWLINE = '\n'
-const RE_INI_KEY_VAL = /^\s*([\w.-]+)\s*=\s*(.*)?\s*$/
-const RE_NEWLINES = /\\n/g
-const NEWLINES_MATCH = /\n|\r|\r\n/
-
-// Parses src into an Object
-function parse (src /*: string | Buffer */, options /*: ?DotenvParseOptions */) /*: DotenvParseOutput */ {
-  const debug = Boolean(options && options.debug)
-  const obj = {}
-
-  // convert Buffers before splitting into lines and processing
-  src.toString().split(NEWLINES_MATCH).forEach(function (line, idx) {
-    // matching "KEY' and 'VAL' in 'KEY=VAL'
-    const keyValueArr = line.match(RE_INI_KEY_VAL)
-    // matched?
-    if (keyValueArr != null) {
-      const key = keyValueArr[1]
-      // default undefined or missing values to empty string
-      let val = (keyValueArr[2] || '')
-      const end = val.length - 1
-      const isDoubleQuoted = val[0] === '"' && val[end] === '"'
-      const isSingleQuoted = val[0] === "'" && val[end] === "'"
-
-      // if single or double quoted, remove quotes
-      if (isSingleQuoted || isDoubleQuoted) {
-        val = val.substring(1, end)
-
-        // if double quoted, expand newlines
-        if (isDoubleQuoted) {
-          val = val.replace(RE_NEWLINES, NEWLINE)
-        }
-      } else {
-        // remove surrounding whitespace
-        val = val.trim()
-      }
-
-      obj[key] = val
-    } else if (debug) {
-      log(`did not match key and value when parsing line ${idx + 1}: ${line}`)
-    }
-  })
-
-  return obj
-}
-
-// Populates process.env from .env file
-function config (options /*: ?DotenvConfigOptions */) /*: DotenvConfigOutput */ {
-  let dotenvPath = path.resolve(process.cwd(), '.env')
-  let encoding /*: string */ = 'utf8'
-  let debug = false
-
-  if (options) {
-    if (options.path != null) {
-      dotenvPath = options.path
-    }
-    if (options.encoding != null) {
-      encoding = options.encoding
-    }
-    if (options.debug != null) {
-      debug = true
-    }
-  }
-
-  try {
-    // specifying an encoding returns a string instead of a buffer
-    const parsed = parse(fs.readFileSync(dotenvPath, { encoding }), { debug })
-
-    Object.keys(parsed).forEach(function (key) {
-      if (!Object.prototype.hasOwnProperty.call(process.env, key)) {
-        process.env[key] = parsed[key]
-      } else if (debug) {
-        log(`"${key}" is already defined in \`process.env\` and will not be overwritten`)
-      }
-    })
-
-    return { parsed }
-  } catch (e) {
-    return { error: e }
-  }
-}
-
-module.exports.config = config
-module.exports.parse = parse
-
-
-/***/ }),
-
 /***/ 1643:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -39203,7 +39083,6 @@ module.exports = { getTwitterID, extractTwitterHandle };
 
 const core = __nccwpck_require__(6422);
 const github = __nccwpck_require__(8484);
-__nccwpck_require__(8620).config()
 
 const { renderString } = __nccwpck_require__(2633);
 const { Tweet } = __nccwpck_require__(5083);
@@ -39219,35 +39098,38 @@ const runAction = (payload) => {
 
 async function run() {
     try {
+        console.log(github.context);
         const payload_out = JSON.stringify(github.context.payload, undefined, 2);
         const payload = github.context.payload;
         var tweetContent = core.getInput('TWEET');
         var tweet;
-        try{
-            tweet = await renderString(tweetContent,payload);
-        }catch(error){
-            tweet = tweetContent;
-            console.log(error);
+        
+        var owner = payload.repository.owner.name;
+        var skipOwner = core.getInput('skip-owner');
+        if(skipOwner && payload.commits.length==1 && owner==payload.commits[0].author.name){
+            core.setOutput("Action skiped as the event was make by the owner");
+        }else{
+            try{
+                tweet = await renderString(tweetContent,payload);
+            }catch(error){
+                tweet = tweetContent;
+                console.log(error);
+            }
+            twitterCredentials =  {
+                consumer_key: core.getInput('TWITTER_API_KEY'),
+                consumer_secret: core.getInput('TWITTER_API_SECRET_KEY'),
+                access_token_key: core.getInput('TWITTER_ACCESS_TOKEN'),
+                access_token_secret: core.getInput('TWITTER_ACCESS_TOKEN_SECRET')
+            }
+            if(runAction(payload)){
+                console.log(`Tweet: ${tweet}`);
+                var result = await Tweet(twitterCredentials, tweet);
+                console.log(result);
+                core.setOutput(`Action completed ${result}`);
+            }
+            else
+                core.setOutput("Action skiped due to commit message");
         }
-        // console.log(`Tweet: ${tweet}`);
-
-        twitterCredentials =  {
-            consumer_key: core.getInput('TWITTER_API_KEY'),
-            consumer_secret: core.getInput('TWITTER_API_SECRET_KEY'),
-            access_token_key: core.getInput('TWITTER_ACCESS_TOKEN'),
-            access_token_secret: core.getInput('TWITTER_ACCESS_TOKEN_SECRET')
-        }
-        // console.log(twitterCredentials);
-
-        if(runAction(payload)){
-            console.log(`Tweet: ${tweet}`);
-            var result = await Tweet(twitterCredentials, tweet);
-            console.log(result);
-            core.setOutput(`Action completed ${result}`);
-        }
-        else
-            core.setOutput("Action skiped due to commit message");
-
     }catch(error){
         core.setFailed(error.message);
     }
