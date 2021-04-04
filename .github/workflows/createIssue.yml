@@ -1,4 +1,4 @@
-name: Sample worflow on push
+name: Issue Creation
 
 on:
   issue:
