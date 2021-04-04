@@ -1,10 +1,14 @@
 name: 'Tweet Activity'
 description: 'A GitHub Action that will tweet out about certain actions in your repo so everyone following you can be kept updated'
 inputs:
-  TWEET:  # id of input
+  tweet:  # id of input
     description: 'Content of the tweet you wanna make'
     required: true
     default: 'Hello World'
+  skip_owner: 
+    description: Set true if you don't want the action to happen if the action is done by the repo owner
+    required: false 
+    default: false
   GITHUB_TOKEN:
     description: Secret GitHub API token to use for making API requests.
     default: ${{ github.token }}
@@ -25,6 +29,7 @@ inputs:
     description: Twitter API secret access token you get after creating a twitter app
     default: undefined
     required: true 
+  
 
 outputs: 
   tweet-sent:

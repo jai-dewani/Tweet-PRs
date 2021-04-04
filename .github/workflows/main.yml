@@ -13,7 +13,7 @@ jobs:
     - name: Tweet Activity
       uses: jai-dewani/Tweet-PRs@main
       with:
-        TWEET: 'This is a test run, change ${twitter_username}'
+        tweet: 'This is a test run, change ${twitter_username}'
         GITHUB_TOKEN: ${{ github.token }}
         TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
         TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}

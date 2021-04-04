@@ -14,6 +14,7 @@ jobs:
       uses: jai-dewani/Tweet-PRs@main
       with:
         tweet: 'This is a test run'
+        skip_owner: true
         GITHUB_TOKEN: ${{ github.token }}
         TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
         TWITTER_API_SECRET_KEY: ${{ secrets.TWITTER_API_SECRET_KEY }}
