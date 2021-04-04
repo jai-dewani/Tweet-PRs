@@ -14,3 +14,8 @@ jobs:
       uses: jai-dewani/Tweet-PRs@main
       with:
         tweet: 'This is a test run'
+        GITHUB_TOKEN: ${{ github.token }}
+        TWITTER_API_KEY: ${{ secret.TWITTER_API_KEY }}
+        TWITTER_API_SECRET_KEY: ${{ secret.TWITTER_API_SECRET_KEY }}
+        TWITTER_ACCESS_TOKEN: ${{ secret.TWITTER_ACCESS_TOKEN }}
+        TWITTER_ACCESS_TOKEN_SECRET: ${{ secret.TWITTER_ACCESS_TOKEN_SECRET }}

@@ -1,10 +1,31 @@
 name: 'Tweet Activity'
 description: 'A GitHub Action that will tweet out about certain actions in your repo so everyone following you can be kept updated'
 inputs:
-  tweet:  # id of input
+  TWEET:  # id of input
     description: 'Content of the tweet you wanna make'
     required: true
     default: 'Hello World'
+  GITHUB_TOKEN:
+    description: Secret GitHub API token to use for making API requests.
+    default: ${{ secret.ACCESS_TOKEN }}
+    required: true
+  TWITTER_API_KEY:
+    description: Twitter API key you get after creating a twitter app
+    default: ${{ secret.TWITTER_API_KEY }}
+    required: true 
+  TWITTER_API_SECRET_KEY:
+    description: Twitter API secret key you get after creating a twitter app
+    default: ${{ secret.TWITTER_API_SECRET_KEY }}
+    required: true 
+  TWITTER_ACCESS_TOKEN:
+    description: Twitter API access token you get after creating a twitter app
+    default: ${{ secret.TWITTER_ACCESS_TOKEN }}
+    required: true 
+  TWITTER_ACCESS_TOKEN_SECRET:
+    description: Twitter API secret access token you get after creating a twitter app
+    default: ${{ secret.TWITTER_ACCESS_TOKEN_SECRET }}
+    required: true 
+
 outputs: 
   tweet-sent:
     description: 'The tweet that got sent out'
