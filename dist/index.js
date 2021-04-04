@@ -39159,8 +39159,9 @@ function wrappy (fn, cb) {
 /***/ 7079:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const { Octokit } = __nccwpck_require__(5886);;
-const octokit = new Octokit({auth: secrets.ACCESS_TOKEN });
+const { Octokit } = __nccwpck_require__(5886);
+const core = __nccwpck_require__(8303);
+const octokit = new Octokit({auth: core.getInput('GITHUB_TOKEN') });
 var result;
 
 const getTwitterID = async(username) => {
@@ -39220,7 +39221,7 @@ async function run() {
     try {
         const payload_out = JSON.stringify(github.context.payload, undefined, 2);
         const payload = github.context.payload;
-        var tweetContent = core.getInput('tweet');
+        var tweetContent = core.getInput('TWEET');
         var tweet;
         try{
             tweet = await renderString(tweetContent,payload);
@@ -39231,10 +39232,10 @@ async function run() {
         // console.log(`Tweet: ${tweet}`);
 
         twitterCredentials =  {
-            consumer_key: secrets.TWITTER_API_KEY,
-            consumer_secret: secrets.TWITTER_API_SECRET_KEY,
-            access_token_key: secrets.TWITTER_ACCESS_TOKEN,
-            access_token_secret: secrets.TWITTER_ACCESS_TOKEN_SECRET,
+            consumer_key: core.getInput('TWITTER_API_KEY'),
+            consumer_secret: core.getInput('TWITTER_API_SECRET_KEY'),
+            access_token_key: core.getInput('TWITTER_ACCESS_TOKEN'),
+            access_token_secret: core.getInput('TWITTER_ACCESS_TOKEN_SECRET')
         }
         // console.log(twitterCredentials);
 
@@ -39242,7 +39243,7 @@ async function run() {
             console.log(`Tweet: ${tweet}`);
             var result = await Tweet(twitterCredentials, tweet);
             console.log(result);
-            core.setOutput("Action completed");
+            core.setOutput(`Action completed ${result}`);
         }
         else
             core.setOutput("Action skiped due to commit message");
@@ -39324,6 +39325,14 @@ async function Tweet(twitterCredentials , tweet){
 }
 
 module.exports = { Tweet };
+
+/***/ }),
+
+/***/ 8303:
+/***/ ((module) => {
+
+module.exports = eval("require")("@action/core");
+
 
 /***/ }),
 
