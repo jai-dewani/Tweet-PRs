@@ -7,23 +7,23 @@ inputs:
     default: 'Hello World'
   GITHUB_TOKEN:
     description: Secret GitHub API token to use for making API requests.
-    default: ${{ secret.ACCESS_TOKEN }}
+    default: ${{ github.token }}
     required: true
   TWITTER_API_KEY:
     description: Twitter API key you get after creating a twitter app
-    default: ${{ secret.TWITTER_API_KEY }}
+    default: undefined
     required: true 
   TWITTER_API_SECRET_KEY:
     description: Twitter API secret key you get after creating a twitter app
-    default: ${{ secret.TWITTER_API_SECRET_KEY }}
+    default: undefined
     required: true 
   TWITTER_ACCESS_TOKEN:
     description: Twitter API access token you get after creating a twitter app
-    default: ${{ secret.TWITTER_ACCESS_TOKEN }}
+    default: undefined
     required: true 
   TWITTER_ACCESS_TOKEN_SECRET:
     description: Twitter API secret access token you get after creating a twitter app
-    default: ${{ secret.TWITTER_ACCESS_TOKEN_SECRET }}
+    default: undefined
     required: true 
 
 outputs: 
