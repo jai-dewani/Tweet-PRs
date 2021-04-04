@@ -1,7 +1,7 @@
 name: Issue Creation
 
 on:
-  issue:
+  issues:
     types: [opened]
 
 jobs:
