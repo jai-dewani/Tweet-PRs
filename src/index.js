@@ -18,7 +18,7 @@ async function run() {
     try {
         const payload_out = JSON.stringify(github.context.payload, undefined, 2);
         const payload = github.context.payload;
-        var tweetContent = core.getInput('tweet');
+        var tweetContent = core.getInput('TWEET');
         var tweet;
         try{
             tweet = await renderString(tweetContent,payload);
@@ -29,10 +29,10 @@ async function run() {
         // console.log(`Tweet: ${tweet}`);
 
         twitterCredentials =  {
-            consumer_key: secrets.TWITTER_API_KEY,
-            consumer_secret: secrets.TWITTER_API_SECRET_KEY,
-            access_token_key: secrets.TWITTER_ACCESS_TOKEN,
-            access_token_secret: secrets.TWITTER_ACCESS_TOKEN_SECRET,
+            consumer_key: core.getInput('TWITTER_API_KEY'),
+            consumer_secret: core.getInput('TWITTER_API_SECRET_KEY'),
+            access_token_key: core.getInput('TWITTER_ACCESS_TOKEN'),
+            access_token_secret: core.getInput('TWITTER_ACCESS_TOKEN_SECRET')
         }
         // console.log(twitterCredentials);
 
@@ -40,7 +40,7 @@ async function run() {
             console.log(`Tweet: ${tweet}`);
             var result = await Tweet(twitterCredentials, tweet);
             console.log(result);
-            core.setOutput("Action completed");
+            core.setOutput(`Action completed ${result}`);
         }
         else
             core.setOutput("Action skiped due to commit message");

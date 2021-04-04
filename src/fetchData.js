@@ -1,5 +1,6 @@
-const { Octokit } = require("@octokit/core");;
-const octokit = new Octokit({auth: secrets.ACCESS_TOKEN });
+const { Octokit } = require("@octokit/core");
+const core = require("@action/core");
+const octokit = new Octokit({auth: core.getInput('GITHUB_TOKEN') });
 var result;
 
 const getTwitterID = async(username) => {
