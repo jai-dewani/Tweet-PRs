@@ -39160,7 +39160,7 @@ function wrappy (fn, cb) {
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const { Octokit } = __nccwpck_require__(5886);
-const core = __nccwpck_require__(8303);
+const core = __nccwpck_require__(6422);
 const octokit = new Octokit({auth: core.getInput('GITHUB_TOKEN') });
 var result;
 
@@ -39325,14 +39325,6 @@ async function Tweet(twitterCredentials , tweet){
 }
 
 module.exports = { Tweet };
-
-/***/ }),
-
-/***/ 8303:
-/***/ ((module) => {
-
-module.exports = eval("require")("@action/core");
-
 
 /***/ }),
 
